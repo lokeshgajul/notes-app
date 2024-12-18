@@ -1,14 +1,30 @@
 import "./App.css";
 import { Button } from "./components/ui/button";
 import Navbar from "./components/Navbar";
-import CreateNote from "./components/createNote";
+import CreateNote from "./components/CreateNote";
+import {
+  Sidebar,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/Sidebar";
+import { ThemeProvider } from "./context/ThemeContext";
 
-function App() {
+function App({ children }) {
   return (
-    <div className="bg-[#eaeaea] h-screen">
-      <Navbar />
-      <CreateNote />
-    </div>
+    <ThemeProvider>
+      <SidebarProvider>
+        <AppSidebar />
+        <div className=" h-full w-full">
+          <Navbar />
+          {/* <SidebarTrigger /> */}
+
+          {children}
+
+          <CreateNote />
+        </div>
+      </SidebarProvider>
+    </ThemeProvider>
   );
 }
 

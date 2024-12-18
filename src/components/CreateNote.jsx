@@ -12,12 +12,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import Notes from "./Notes";
+import axios from "axios";
 
 const CreateNote = () => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
-  const [notes, setNotes] = useState([]);
+  // const [notes, setNotes] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [image, setImage] = useState(null);
@@ -68,13 +69,47 @@ const CreateNote = () => {
     setDesc("");
   };
 
+  const handleCreateNote = async () => {
+    if (!title || !desc) {
+      console.log("title and desc are required ");
+    }
+
+    if (isEditing) {
+      // const updateNotes = [...notes];
+      // updateNotes[editIndex] = { title, desc };
+      // setNotes(updateNotes);
+
+      setEditIndex(null);
+      setIsEditing(false);
+    } else {
+      try {
+        const response = await axios.post("http://localhost:3000/createNote", {
+          title,
+          description: desc,
+        });
+
+        const savedNote = await response.data;
+        console.log("data", savedNote);
+        // setNotes([
+        //   ...notes,
+        //   { title: savedNote.title, desc: savedNote.description },
+        // ]);
+      } catch (error) {
+        console.log("error", error);
+      }
+    }
+    setOpen(false);
+    setTitle("");
+    setDesc("");
+  };
+
   return (
     <>
       <div className="flex flex-col justify-center items-center ">
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger
             asChild
-            className="flex justify-center items-center hover:bg-white"
+            className="flex justify-center items-center hover:bg-white mt-6"
           >
             <Button variant="outline">Create Note </Button>
           </DialogTrigger>
@@ -112,16 +147,16 @@ const CreateNote = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button type="button" onClick={handleSaveNote}>
+              <Button type="button" onClick={handleCreateNote}>
                 {isEditing ? "update note" : "save note"}
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
-      <div className="pl-36 mt-10">
+      <div className="pl-28 mt-10">
         <Notes
-          notes={notes}
+          // notes={notes}
           handleDeleteNotes={handleDeleteNotes}
           edit={hanleEditNote}
           handleImage={handleImageUpload}

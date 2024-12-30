@@ -18,56 +18,51 @@ const CreateNote = () => {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
-  // const [notes, setNotes] = useState([]);
+  const [notes, setNotes] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [image, setImage] = useState(null);
-
-  const handleDeleteNotes = (indexToDelete) => {
-    setNotes(notes.filter((_, index) => index != indexToDelete));
-    console.log("deleted ", indexToDelete);
-  };
 
   const handleImageUpload = (e, index) => {
     const file = e.target.files[0];
     if (file) {
       const newImage = URL.createObjectURL(file);
       setImage(newImage); // optional
-      setNotes((prevNotes) =>
-        prevNotes.map((note, i) =>
-          i === index ? { ...note, image: newImage } : note
-        )
-      );
+      // setNotes((prevNotes) =>
+      //   prevNotes.map((note, i) =>
+      //     i === index ? { ...note, image: newImage } : note
+      //   )
+      // );
     }
     console.log("file", image);
   };
 
   // Edit Note
-  const hanleEditNote = (index) => {
-    const note = notes[index];
-    setTitle(note.title);
-    setDesc(note.desc);
-    setIsEditing(true);
-    setEditIndex(index);
-    setOpen(true);
-  };
+  // const hanleEditNote = (index) => {
+  //   const note = notes[index];
+  //   setTitle(note.title);
+  //   setDesc(note.desc);
+  //   setIsEditing(true);
+  //   setEditIndex(index);
+  //   setOpen(true);
+  // };
 
   // ADD or UPDATE notes state
-  const handleSaveNote = () => {
-    if (isEditing) {
-      const updateNotes = [...notes];
-      updateNotes[editIndex] = { title, desc };
-      setNotes(updateNotes);
-      setEditIndex(null);
-      setIsEditing(false);
-    } else {
-      setNotes([...notes, { title, desc }]);
-    }
+  // const handleSaveNote = () => {
+  //   if (isEditing) {
+  //     const updateNotes = [...notes];
+  //     updateNotes[editIndex] = { title, desc };
+  //     setNotes(updateNotes);
+  //     setEditIndex(null);
+  //     setIsEditing(false);
+  //   } else {
+  //     setNotes([...notes, { title, desc }]);
+  //   }
 
-    setOpen(false);
-    setTitle("");
-    setDesc("");
-  };
+  //   setOpen(false);
+  //   setTitle("");
+  //   setDesc("");
+  // };
 
   const handleCreateNote = async () => {
     if (!title || !desc) {
@@ -90,10 +85,10 @@ const CreateNote = () => {
 
         const savedNote = await response.data;
         console.log("data", savedNote);
-        // setNotes([
-        //   ...notes,
-        //   { title: savedNote.title, desc: savedNote.description },
-        // ]);
+        setNotes([
+          ...notes,
+          { title: savedNote.title, desc: savedNote.description },
+        ]);
       } catch (error) {
         console.log("error", error);
       }
@@ -117,7 +112,8 @@ const CreateNote = () => {
             <DialogHeader>
               <DialogTitle>New Task</DialogTitle>
               <DialogDescription>
-                Make changes to your profile here. Click save when you're done.
+                Make changes to your profile here. Click save when you&apos;re
+                done.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -156,9 +152,9 @@ const CreateNote = () => {
       </div>
       <div className="pl-28 mt-10">
         <Notes
-          // notes={notes}
-          handleDeleteNotes={handleDeleteNotes}
-          edit={hanleEditNote}
+          notes={notes}
+          // handleDeleteNotes={handleDeleteNotes}
+          // edit={hanleEditNote}
           handleImage={handleImageUpload}
           image={image}
         />

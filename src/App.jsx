@@ -1,30 +1,37 @@
 import "./App.css";
-import { Button } from "./components/ui/button";
 import Navbar from "./components/Navbar";
 import CreateNote from "./components/CreateNote";
-import {
-  Sidebar,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/Sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { ThemeProvider } from "./context/ThemeContext";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./components/Home";
+import Signup from "./components/Auth/Signup";
+import Login from "./components/Auth/Login";
+import Notes from "./components/Notes";
 
-function App({ children }) {
+function App() {
   return (
-    <ThemeProvider>
-      <SidebarProvider>
-        <AppSidebar />
-        <div className=" h-full w-full">
-          <Navbar />
-          {/* <SidebarTrigger /> */}
-
-          {children}
-
-          <CreateNote />
-        </div>
-      </SidebarProvider>
-    </ThemeProvider>
+    <Router>
+      <ThemeProvider>
+        {/* <SidebarProvider> */}
+        <Navbar />
+        {/*  Navbar moved outside of <Routes> */}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Home />
+              </>
+            }
+          />
+          <Route path="/signup" Component={Signup} />
+          <Route path="/signin" Component={Login} />
+          <Route path="/notes" Component={Notes} />
+        </Routes>
+        {/* </SidebarProvider> */}
+      </ThemeProvider>
+    </Router>
   );
 }
 

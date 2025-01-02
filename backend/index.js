@@ -7,6 +7,7 @@ import mongoDbConnection from "./DB/Db.js";
 import {
   deleteNote,
   GenerateNote,
+  getNoteById,
   getNotes,
   uploadImage,
 } from "./Controller/NoteController.js";
@@ -125,6 +126,8 @@ app.post("/deleteNote", deleteNote);
 // });
 
 app.post("/uploadImage", uploadImage);
+
+app.post("/getSingleNote", getNoteById);
 
 app.listen(3000, (req, res) => {
   console.log("Server is running...");

@@ -104,9 +104,12 @@ const CreateNote = () => {
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger
             asChild
-            className="flex justify-center items-center hover:bg-white mt-6"
+            className="flex justify-center items-center bg-[#f1f1f1] hover:bg-white mt-6"
           >
-            <Button variant="outline">Create Note </Button>
+            <Button variant="outline">
+              {" "}
+              <p className=" p-2 ">Create Note</p>{" "}
+            </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px] ">
             <DialogHeader>
@@ -150,7 +153,7 @@ const CreateNote = () => {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="pl-28 mt-10">
+      <div className=" mt-4 ">
         <Notes
           notes={notes}
           // handleDeleteNotes={handleDeleteNotes}

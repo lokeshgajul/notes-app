@@ -1,12 +1,17 @@
 import { MdEdit } from "react-icons/md";
 import { MdDeleteOutline } from "react-icons/md";
-import { BiImageAdd } from "react-icons/bi";
+import { GrMenu } from "react-icons/gr";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 const Notes = ({ notes, edit, handleImage, image }) => {
   const [notesCard, setNotesCard] = useState([]);
+  const [singleNote, setSingleNote] = useState();
+  const [selectedNoteId, setSelectedNoteId] = useState(null);
 
+  const handleCardId = (id) => {
+    id ? "bg-[#e0e5ef]" : "bg-white";
+  };
   const getnotesCard = async () => {
     try {
       const response = await axios.get("http://localhost:3000/getNotes");
@@ -60,14 +65,27 @@ const Notes = ({ notes, edit, handleImage, image }) => {
     }
   };
 
+  const getSelectedNotes = async (id) => {
+    try {
+      const res = await axios.post("http://localhost:3000/getSingleNote", {
+        id: id,
+      });
+      const data = res.data;
+      setSingleNote(data);
+      setSelectedNoteId(data.selectedNotes._id);
+      console.log("Selected Note ID:", data.selectedNotes._id);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     getnotesCard();
   }, [notes]);
 
   return (
     <div className="">
-      <div className="font-medium text-xl">My Notes</div>
-      <div className="mt-3 flex flex-row flex-wrap ">
+      {/* <div className="mt-3 flex flex-row flex-wrap ">
         {notesCard.map((item, index) => (
           <div
             className="p-2 shadow-md h-auto flex flex-col rounded-md bg-[#f1f1f1] justify-between mr-5 w-[180px] mb-5"
@@ -134,6 +152,75 @@ const Notes = ({ notes, edit, handleImage, image }) => {
             </div>
           </div>
         ))}
+      </div> */}
+
+      <div className="grid grid-cols-4 h-screen">
+        <div className="col-span-1 border-r-2 h-full">
+          <div className="flex flex-row items-center">
+            <div className="pl-4 cursor-pointer">
+              <GrMenu width={2} size={20} />
+            </div>
+            <p className="py-4 pl-3">Notes</p>
+          </div>
+          <div>
+            {notesCard.map((item, index) => (
+              <div key={index}>
+                <div
+                  onClick={() => getSelectedNotes(item._id)} // Set the selected note when clicked
+                  className={`${
+                    item._id === selectedNoteId
+                      ? "bg-[#e8ecf6] "
+                      : "hover:bg-[#f5f8fe]" // Apply bg color if selected
+                  } p-5 flex justify-between flex-row border-t-2 cursor-pointer  `}
+                >
+                  <div>
+                    <p className="text-[16px] capitalize font-medium">
+                      {item.title}
+                    </p>
+                    <p className="text-[15px] text-gray-700 font-medium leading-7 tracking-wide">
+                      {item.description}
+                    </p>
+                  </div>
+                  <div className="w-32 h-20">
+                    {item.image ? (
+                      <img
+                        src={item.image}
+                        alt="Note"
+                        className="w-full h-full object-cover rounded-md"
+                      />
+                    ) : (
+                      <div>No image uploaded</div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="col-span-3 ">
+          <div className="border-b-2 p-4">note Content</div>
+          {singleNote ? (
+            <div className="p-5">
+              <p className="capitalize text-lg font-decorative font-semibold mb-4">
+                {singleNote && singleNote.selectedNotes.title}
+              </p>
+              <div className="h-[50vh] w-full rounded-lg">
+                <img
+                  className="h-full w-full object-cover rounded-lg"
+                  src={singleNote?.selectedNotes.image}
+                  alt="Image Not Available..."
+                />
+              </div>
+
+              <div className="pt-4">
+                {singleNote && singleNote.selectedNotes.description}
+              </div>
+            </div>
+          ) : (
+            <div className="p-16 text-gray-400">new task</div>
+          )}
+        </div>
       </div>
     </div>
   );

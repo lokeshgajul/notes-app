@@ -100,3 +100,13 @@ export const uploadImage = async (req, res) => {
     res.status(500).json({ message: "Error uploading file." });
   }
 };
+
+export const getNoteById = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const selectedNotes = await Note.findById(id);
+    res.status(200).json({ message: "retrieved successfully ", selectedNotes });
+  } catch (error) {
+    console.error(error);
+  }
+};

@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Notes from "./Notes";
 import axios from "axios";
 
@@ -22,6 +22,21 @@ const CreateNote = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [image, setImage] = useState(null);
+
+  const taskInputRef = useRef(null);
+
+  const handleKeyDown = (e) => {
+    if (e.key == "Enter") {
+      e.preventDefault();
+      taskInputRef.current.focus();
+    }
+  };
+
+  const handleInput = (event) => {
+    const textarea = event.target;
+    textarea.style.height = "auto"; // Reset height to auto to shrink if necessary
+    textarea.style.height = `${textarea.scrollHeight}px`; // Set height based on scroll height
+  };
 
   const handleImageUpload = (e, index) => {
     const file = e.target.files[0];
@@ -100,67 +115,31 @@ const CreateNote = () => {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center ">
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger
-            asChild
-            className="flex justify-center items-center bg-[#f1f1f1] hover:bg-white mt-6"
-          >
-            <Button variant="outline">
-              {" "}
-              <p className=" p-2 ">Create Note</p>{" "}
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px] ">
-            <DialogHeader>
-              <DialogTitle>New Task</DialogTitle>
-              <DialogDescription>
-                Make changes to your profile here. Click save when you&apos;re
-                done.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Title
-                </Label>
-                <Input
-                  id="name"
-                  value={title}
-                  onChange={(e) => {
-                    setTitle(e.target.value);
-                  }}
-                  className="col-span-3"
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="username" className="text-right">
-                  Description
-                </Label>
-                <Input
-                  id="username"
-                  value={desc}
-                  onChange={(e) => setDesc(e.target.value)}
-                  className="col-span-3"
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button type="button" onClick={handleCreateNote}>
-                {isEditing ? "update note" : "save note"}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+      <div className="p-10 text-gray-400 flex flex-col ">
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
+          placeholder="Title"
+          className="focus:outline-none font-bold text-black  placeholder-gray-600 capitalize"
+          onKeyDown={handleKeyDown}
+        />
+        <textarea
+          name="note"
+          id="note"
+          placeholder="Take a note"
+          className="focus:outline-none mt-8 placeholder-gray-500 w-full p-2 text-gray-800 rounded resize-none "
+          ref={taskInputRef}
+          onInput={handleInput} // Adjust height on input
+          style={{ overflow: "hidden" }} // Prevent scrollbars
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
+        ></textarea>
       </div>
       <div className=" mt-4 ">
-        <Notes
-          notes={notes}
-          // handleDeleteNotes={handleDeleteNotes}
-          // edit={hanleEditNote}
-          handleImage={handleImageUpload}
-          image={image}
-        />
+        <Notes notes={notes} />
       </div>
     </>
   );

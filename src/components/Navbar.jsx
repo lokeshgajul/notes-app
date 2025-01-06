@@ -45,17 +45,17 @@ const Navbar = () => {
     //   </div>
     // </div>
     <>
-      <div className="p-5 flex flex-row justify-between px-32 bg-[#1f2123]">
-        <div className="text-white text-2xl  font-normal italic tracking-wider">
+      <div className="px-20 py-6 w-full flex flex-row justify-between items-center bg-[#1f2123] box-border">
+        <div className="text-white text-2xl font-normal italic tracking-wider">
           Simple Note
         </div>
         <div>
-          <ul className="flex flex-row space-x-5 text-white">
+          <ul className="flex flex-row flex-wrap space-x-5 text-white">
             <li className="cursor-pointer hover:text-gray-600 text-lg">
-              Blogs{" "}
+              Blogs
             </li>
             <li className="cursor-pointer hover:text-gray-600 text-lg">
-              <Link to="/signin"> Log in</Link>
+              <Link to="/signin">Log in</Link>
             </li>
             <li className="cursor-pointer hover:text-gray-600 text-lg">
               <Link to="/signup">Sign Up</Link>

@@ -10,9 +10,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Notes from "./Notes";
 import axios from "axios";
+import { MdOutlineDone } from "react-icons/md";
 
 const CreateNote = () => {
   const [open, setOpen] = useState(false);
@@ -22,21 +23,21 @@ const CreateNote = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [image, setImage] = useState(null);
+  const containRef = useRef(null);
+  const isFormValid = () => title.trim() && desc.trim();
 
-  const taskInputRef = useRef(null);
+  useEffect(() => {
+    const handleClickoutside = (event) => {
+      if (containRef.current && !containRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickoutside);
 
-  const handleKeyDown = (e) => {
-    if (e.key == "Enter") {
-      e.preventDefault();
-      taskInputRef.current.focus();
-    }
-  };
-
-  const handleInput = (event) => {
-    const textarea = event.target;
-    textarea.style.height = "auto"; // Reset height to auto to shrink if necessary
-    textarea.style.height = `${textarea.scrollHeight}px`; // Set height based on scroll height
-  };
+    return () => {
+      document.removeEventListener("mousedown", handleClickoutside);
+    };
+  }, []);
 
   const handleImageUpload = (e, index) => {
     const file = e.target.files[0];
@@ -114,34 +115,89 @@ const CreateNote = () => {
   };
 
   return (
-    <>
-      <div className="p-10 text-gray-400 flex flex-col ">
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-          }}
-          placeholder="Title"
-          className="focus:outline-none font-bold text-black  placeholder-gray-600 capitalize"
-          onKeyDown={handleKeyDown}
+    <div>
+      <div className="mt-5 flex justify-center">
+        <div className="w-2/3 bg-white rounded-lg relative shadow-md">
+          {/* Button or Icon to Create a Note */}
+          <button
+            className="absolute top-1 right-2 p-2"
+            onClick={() => setOpen(!open)}
+          >
+            <MdOutlineDone
+              onClick={() => {
+                if (isFormValid()) handleCreateNote();
+              }}
+              size={20}
+              color={isFormValid() ? "black" : "grey"}
+            />
+          </button>
+
+          <div
+            className="flex justify-start items-start"
+            onClick={() => setOpen(!open)}
+          >
+            <input
+              type="text"
+              name="title"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+              id="note"
+              placeholder="Title"
+              className="p-2.5 focus:outline-none rounded-lg capitalize text-[14px] font-semibold tracking-wide   w-full placeholder-gray-500 text-gray-800"
+            />
+          </div>
+          {open && (
+            <>
+              <div className="flex justify-start items-start">
+                {/* <input
+                  type="text"
+                  name="desc"
+                  id="note"
+                  value={desc}
+                  onChange={(e) => setDesc(e.target.value)}
+                  placeholder="Take a note"
+                /> */}
+                <textarea
+                  className="p-2.5 focus:outline-none rounded-lg capitalize text-[13px] font-medium tracking-wider w-full placeholder-gray-500 text-black"
+                  name="desc"
+                  placeholder="Take a note"
+                  id="note"
+                  rows="1"
+                  value={desc}
+                  onChange={(e) => {
+                    setDesc(e.target.value);
+                  }}
+                  onInput={(e) => {
+                    e.target.style.height = "auto";
+                    e.target.style.height = `${e.target.scrollHeight}px`;
+                  }}
+                ></textarea>
+              </div>
+              <div className="flex justify-center items-center">
+                <p
+                  className="w-full text-end pr-6 pb-2 cursor-pointer"
+                  onClick={() => setOpen(false)}
+                >
+                  close
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="pl-20 mt-10">
+        <Notes
+          notes={notes}
+          // handleDeleteNotes={handleDeleteNotes}
+          // edit={hanleEditNote}
+          handleImage={handleImageUpload}
+          image={image}
         />
-        <textarea
-          name="note"
-          id="note"
-          placeholder="Take a note"
-          className="focus:outline-none mt-8 placeholder-gray-500 w-full p-2 text-gray-800 rounded resize-none "
-          ref={taskInputRef}
-          onInput={handleInput} // Adjust height on input
-          style={{ overflow: "hidden" }} // Prevent scrollbars
-          value={desc}
-          onChange={(e) => setDesc(e.target.value)}
-        ></textarea>
       </div>
-      <div className=" mt-4 ">
-        <Notes notes={notes} />
-      </div>
-    </>
+    </div>
   );
 };
 

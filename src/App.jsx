@@ -21,7 +21,7 @@ function App() {
           <Route path="/" Component={Home} />
           <Route path="/signup" Component={Signup} />
           <Route path="/signin" Component={Login} />
-          <Route path="/notes" Component={Notes} />
+          <Route path="/notes" Component={CreateNote} />
           <Route path="/noteDetails" Component={NoteDetails} />
         </Routes>
         {/* </SidebarProvider> */}

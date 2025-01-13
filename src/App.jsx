@@ -15,16 +15,23 @@ function App() {
     <Router>
       <ThemeProvider>
         {/* <SidebarProvider> */}
-        {/* <Navbar /> */}
+        <Navbar />
         {/*  Navbar moved outside of <Routes> */}
         <Routes>
           <Route path="/" Component={Home} />
           <Route path="/signup" Component={Signup} />
           <Route path="/signin" Component={Login} />
-          <Route path="/notes" Component={CreateNote} />
+          <Route
+            path="/notes"
+            element={
+              <>
+                {/* <SidebarProvider> */}
+                <CreateNote />
+              </>
+            }
+          />
           <Route path="/noteDetails" Component={NoteDetails} />
         </Routes>
-        {/* </SidebarProvider> */}
       </ThemeProvider>
     </Router>
   );

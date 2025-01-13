@@ -2,12 +2,13 @@ import { GrMenu } from "react-icons/gr";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { IoCreateOutline } from "react-icons/io5";
-import { MdOutlineDone } from "react-icons/md";
+import { MdOutlineDone, MdEdit, MdDeleteOutline } from "react-icons/md";
 import Image from "../assets/upload.png";
 import NoteDetails from "./NoteDetails";
+import { BiImageAdd } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 
-const Notes = ({ notes }) => {
+const Notes = ({ notes, edit }) => {
   const [notesCard, setNotesCard] = useState([]);
   const [singleNote, setSingleNote] = useState();
   const [selectedNoteId, setSelectedNoteId] = useState(null);
@@ -135,7 +136,7 @@ const Notes = ({ notes }) => {
 
   return (
     <div className="">
-      {/* <div className="mt-3 flex flex-row flex-wrap ">
+      <div className="mt-3 flex flex-row flex-wrap ">
         {notesCard.map((item, index) => (
           <div
             className="p-2 shadow-md h-auto flex flex-col rounded-md bg-[#f1f1f1] justify-between mr-5 w-[180px] mb-5"
@@ -202,137 +203,6 @@ const Notes = ({ notes }) => {
             </div>
           </div>
         ))}
-      </div> */}
-
-      <div className="grid grid-cols-4 h-screen">
-        <div className="col-span-1 border-r-2 h-full">
-          <div className="flex flex-row justify-between items-center">
-            <div className="pl-4 cursor-pointer">
-              <GrMenu width={2} size={20} />
-            </div>
-            <p className="py-4 pl-3">Notes</p>
-            <div className="pr-4" onClick={() => navigate("/noteDetails")}>
-              <IoCreateOutline size={20} />
-            </div>
-          </div>
-          <div>
-            {notesCard.map((item, index) => (
-              <div key={index}>
-                <div
-                  onClick={() => getSelectedNotes(item._id)} // Set the selected note when clicked
-                  className={`${
-                    item._id === selectedNoteId
-                      ? "bg-[#e8ecf6] "
-                      : "hover:bg-[#f5f8fe]" // Apply bg color if selected
-                  } p-5 flex justify-between flex-row border-t-2 cursor-pointer  `}
-                >
-                  <div>
-                    <p className="text-[16px] capitalize font-medium">
-                      {item.title.slice(0, 20)}
-                    </p>
-                    <p className="text-[15px] text-gray-700 font-medium leading-7 tracking-wide">
-                      {item.description.slice(0, 30)}...
-                    </p>
-                  </div>
-                  <div className="w-32 h-20">
-                    {item.image ? (
-                      <img
-                        src={item.image}
-                        alt="Note"
-                        className="w-full h-full object-cover rounded-md"
-                      />
-                    ) : (
-                      <div className="w-1/2 h-1/2 flex justify-between mt-5 items-center">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          id={`file-input-${item.id}`}
-                          onChange={(e) => {
-                            const selectedFile = e.target.files[0];
-                            if (!selectedFile) {
-                              return;
-                            }
-                            handleImageUpload(item._id, selectedFile);
-                          }}
-                        />
-                        <label
-                          htmlFor={`file-input-${item.id}`}
-                          className="cursor-pointer  rounded-md p-2 text-sm"
-                        >
-                          Upload Image
-                        </label>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="col-span-3 ">
-          <div className="border-b-2 p-4">note Content</div>
-          {/* {singleNote ? (
-            <div className="p-5">
-              <p className="capitalize text-lg font-decorative font-semibold mb-4">
-                {singleNote && singleNote.selectedNotes.title}
-              </p>
-              <div className="h-[50vh] w-full rounded-lg">
-                <img
-                  className="h-full w-full object-cover rounded-lg"
-                  src={singleNote?.selectedNotes.image}
-                  alt="Image Not Available..."
-                />
-              </div>
-
-              <div className="pt-4">
-                {singleNote && singleNote.selectedNotes.description}
-              </div>
-            </div>
-          ) : (
-            <div className="p-10 text-gray-400 flex flex-col ">
-              <input
-                type="text"
-                value={title}
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                }}
-                placeholder="Title"
-                className="focus:outline-none font-bold text-black  placeholder-gray-600 capitalize"
-                onKeyDown={handleKeyDown}
-              />
-              <textarea
-                name="note"
-                id="note"
-                placeholder="Take a note"
-                className="focus:outline-none mt-8 placeholder-gray-500 w-full p-2 text-gray-800 rounded resize-none "
-                ref={taskInputRef}
-                onInput={handleInput} // Adjust height on input
-                style={{ overflow: "hidden" }} // Prevent scrollbars
-                value={desc}
-                onChange={(e) => setDesc(e.target.value)}
-              ></textarea>
-            </div>
-          )} */}
-
-          <NoteDetails
-            singleNote={singleNote}
-            title={title}
-            setTitle={setTitle}
-            handleKeyDown={handleKeyDown}
-            taskInputRef={taskInputRef}
-            handleInput={handleInput}
-            desc={desc}
-            setDesc={setDesc}
-          />
-          <button
-            className="fixed bottom-10 right-10 mt-16 p-3 bg-blue-600 rounded-3xl text-white"
-            onClick={handleCreateNote}
-          >
-            <MdOutlineDone size={20} />
-          </button>
-        </div>
       </div>
     </div>
   );

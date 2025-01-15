@@ -139,7 +139,7 @@ const Notes = ({ notes, edit }) => {
       <div className="mt-3 flex flex-row flex-wrap ">
         {notesCard.map((item, index) => (
           <div
-            className="p-2 shadow-md h-auto flex flex-col rounded-md bg-[#f1f1f1] justify-between mr-5 w-[180px] mb-5"
+            className="p-2 shadow-md h-auto flex flex-col rounded bg-[#f1f1f1] justify-between mr-5 w-[180px] mb-5"
             key={index}
           >
             <div className="w-full h-[100px] mb-2 bg-gray-200 rounded-md flex items-center justify-center">
@@ -147,7 +147,8 @@ const Notes = ({ notes, edit }) => {
                 <img
                   src={item.image}
                   alt="Note"
-                  className="w-full h-full object-cover rounded-md"
+                  className="w-full h-full object-cover rounded cursor-pointer"
+                  onClick={() => navigate(`/noteDetails/${item._id}`)}
                 />
               ) : (
                 <p
@@ -160,7 +161,10 @@ const Notes = ({ notes, edit }) => {
                 </p>
               )}
             </div>
-            <div className="p-2">
+            <div
+              className="p-2 cursor-pointer"
+              onClick={() => navigate(`/noteDetails/${item._id}`)}
+            >
               <p className="break-words text-[14px] capitalize">{item.title}</p>
               <p className="pt-1 pb-2 break-words text-[13px]">
                 {item.description}

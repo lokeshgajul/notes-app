@@ -16,7 +16,7 @@ import axios from "axios";
 import { MdOutlineDone } from "react-icons/md";
 
 const CreateNote = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState();
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [notes, setNotes] = useState([]);
@@ -82,7 +82,7 @@ const CreateNote = () => {
 
   const handleCreateNote = async () => {
     if (!title || !desc) {
-      console.log("title and desc are required ");
+      alert("title and desc are required ");
     }
 
     if (isEditing) {
@@ -116,75 +116,77 @@ const CreateNote = () => {
 
   return (
     <div>
-      <div className="mt-5 flex justify-center">
-        <div className="w-2/3 bg-white rounded-lg relative shadow-md">
-          {/* Button or Icon to Create a Note */}
-          <button
-            className="absolute top-1 right-2 p-2"
-            onClick={() => setOpen(!open)}
-          >
-            <MdOutlineDone
-              onClick={() => {
-                if (isFormValid()) handleCreateNote();
-              }}
-              size={20}
-              color={isFormValid() ? "black" : "grey"}
-            />
-          </button>
+      <div className="flex justify-center items-start ">
+        <div className=" rounded-xl p-1 mt-5 shadow-slate-400 shadow-md border-t-2 relative w-2/3">
+          <div className="w-full ">
+            <button
+              className="absolute top-2 right-2 p-2"
+              onClick={() => setOpen(!open)}
+            >
+              <MdOutlineDone
+                onClick={() => {
+                  if (isFormValid()) handleCreateNote();
+                }}
+                size={20}
+                color={isFormValid() ? "black" : "grey"}
+              />
+            </button>
 
-          <div
-            className="flex justify-start items-start"
-            onClick={() => setOpen(!open)}
-          >
-            <input
-              type="text"
-              name="title"
-              value={title}
-              onChange={(e) => {
-                setTitle(e.target.value);
-              }}
-              id="note"
-              placeholder="Title"
-              className="p-2.5 focus:outline-none rounded-lg capitalize text-[14px] font-semibold tracking-wide   w-full placeholder-gray-500 text-gray-800"
-            />
+            <div
+              className="flex justify-start items-start"
+              onClick={() => setOpen(!open)}
+            >
+              <input
+                type="text"
+                name="title"
+                value={title}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                }}
+                id="note"
+                placeholder="Title"
+                className="p-2.5 focus:outline-none rounded-lg capitalize text-[14px] font-semibold tracking-wide   w-full placeholder-gray-500 text-gray-800"
+              />
+            </div>
+
+            {open && (
+              <>
+                <div className="flex justify-start items-start">
+                  {/* <input
+                type="text"
+                name="desc"
+                id="note"
+                value={desc}
+                onChange={(e) => setDesc(e.target.value)}
+                placeholder="Take a note"
+              /> */}
+                  <textarea
+                    className="p-2.5 focus:outline-none rounded-lg capitalize text-[13px] font-medium tracking-wider w-full placeholder-gray-500 text-black"
+                    name="desc"
+                    placeholder="Take a note"
+                    id="note"
+                    rows="1"
+                    value={desc}
+                    onChange={(e) => {
+                      setDesc(e.target.value);
+                    }}
+                    onInput={(e) => {
+                      e.target.style.height = "auto";
+                      e.target.style.height = `${e.target.scrollHeight}px`;
+                    }}
+                  ></textarea>
+                </div>
+                <div className="flex justify-center items-center">
+                  <p
+                    className="w-full text-end pr-6 pb-2 cursor-pointer"
+                    onClick={() => setOpen(false)}
+                  >
+                    close
+                  </p>
+                </div>
+              </>
+            )}
           </div>
-          {open && (
-            <>
-              <div className="flex justify-start items-start">
-                {/* <input
-                  type="text"
-                  name="desc"
-                  id="note"
-                  value={desc}
-                  onChange={(e) => setDesc(e.target.value)}
-                  placeholder="Take a note"
-                /> */}
-                <textarea
-                  className="p-2.5 focus:outline-none rounded-lg capitalize text-[13px] font-medium tracking-wider w-full placeholder-gray-500 text-black"
-                  name="desc"
-                  placeholder="Take a note"
-                  id="note"
-                  rows="1"
-                  value={desc}
-                  onChange={(e) => {
-                    setDesc(e.target.value);
-                  }}
-                  onInput={(e) => {
-                    e.target.style.height = "auto";
-                    e.target.style.height = `${e.target.scrollHeight}px`;
-                  }}
-                ></textarea>
-              </div>
-              <div className="flex justify-center items-center">
-                <p
-                  className="w-full text-end pr-6 pb-2 cursor-pointer"
-                  onClick={() => setOpen(false)}
-                >
-                  close
-                </p>
-              </div>
-            </>
-          )}
         </div>
       </div>
 

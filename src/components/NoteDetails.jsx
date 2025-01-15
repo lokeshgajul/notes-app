@@ -1,60 +1,51 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-const NoteDetails = ({
-  singleNote,
-  title,
-  setTitle,
-  handleKeyDown,
-  taskInputRef,
-  handleInput,
-  desc,
-  setDesc,
-}) => {
+const NoteDetails = () => {
+  const [details, setDetails] = useState();
+  const { noteId } = useParams();
+
+  const getSingleNotebyId = async (id) => {
+    try {
+      const res = await axios.post("http://localhost:3000/getSingleNote", {
+        id: noteId,
+      });
+      const data = res.data;
+      setDetails(data.selectedNotes);
+      console.log("notes by id ", data);
+    } catch (error) {
+      throw new error();
+    }
+  };
+
+  useEffect(() => {
+    getSingleNotebyId();
+  }, []);
+
   return (
     <div>
-      {singleNote ? (
-        <div className="p-5">
-          <p className="capitalize text-lg font-decorative font-semibold mb-4">
-            {singleNote && singleNote.selectedNotes.title}
-          </p>
-          <div className="h-[50vh] w-full rounded-lg">
-            <img
-              className="h-full w-full object-cover rounded-lg"
-              src={singleNote?.selectedNotes.image}
-              alt="Image Not Available..."
-            />
-          </div>
+      <div>
+        {details ? (
+          <>
+            <div className="h-[350px] w-[900px] flex justify-center items-center m-7 rounded-xl">
+              <img
+                className="h-full w-full object-cover mt-5 rounded-xl"
+                src={details.image}
+                alt="note"
+              />
+            </div>
 
-          <div className="pt-4">
-            {singleNote && singleNote.selectedNotes.description}
+            <div className="p-3">{details?.title}</div>
+            <div className="p-3">{details?.description}</div>
+          </>
+        ) : (
+          <div>
+            <p>Notes are empty or Not Available</p>
           </div>
-        </div>
-      ) : (
-        <div className="p-10 text-gray-400 flex flex-col ">
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-            placeholder="Title"
-            className="focus:outline-none font-bold text-black  placeholder-gray-600 capitalize"
-            onKeyDown={handleKeyDown}
-          />
-          <textarea
-            name="note"
-            id="note"
-            placeholder="Take a note"
-            className="focus:outline-none mt-8 placeholder-gray-500 w-full p-2 text-gray-800 rounded resize-none "
-            ref={taskInputRef}
-            onInput={handleInput} // Adjust height on input
-            style={{ overflow: "hidden" }} // Prevent scrollbars
-            value={desc}
-            onChange={(e) => setDesc(e.target.value)}
-          ></textarea>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

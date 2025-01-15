@@ -8,13 +8,10 @@ const Navbar = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   return (
     <div
-      className={`  flex flex-row justify-between items-center p-1 pr-5 ${
+      className={`  flex flex-row justify-between items-center p-1 pr-5 border border-b-1 ${
         theme == "dark" ? "bg-[#09090b]" : "bg-white"
       } `}
     >
-      {/* <div className={`${theme == "dark" ? "text-white" : "text-black"}`}>
-        <SidebarTrigger />
-      </div> */}
       <div
         className={` font-semibold tracking-wide p-3 italic ${
           theme == "dark" ? "text-white" : "text-black"

@@ -55,9 +55,9 @@ app.use(
 (async function () {
   // Configuration
   cloudinary.config({
-    cloud_name: "dmt2cp7t7",
-    api_key: "382543213736579",
-    api_secret: "Fx9YngYz5sKHChoF17mIXaNZbvg",
+    cloud_name: process.env.cloud_name,
+    api_key: process.env.api_key,
+    api_secret: process.env.api_secret,
   });
 
   //   // Upload an image

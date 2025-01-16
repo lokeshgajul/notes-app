@@ -13,6 +13,7 @@ import {
 } from "./Controller/NoteController.js";
 import fileUpload from "express-fileupload";
 import { fileURLToPath } from "url";
+import { handleSignup } from "./Controller/AuthController.js";
 // import fspromises from "fs/promises";
 // import fs from "fs";
 
@@ -37,61 +38,13 @@ app.use(
   })
 );
 
-// async function checkPermissions() {
-//   try {
-//     // Check for write access
-//     await fspromises.access(tmpFolderPath, fs.constants.W_OK);
-//     console.log("Node.js process has write permission to the tmp folder.");
-//   } catch (err) {
-//     console.error(
-//       "Node.js process does not have write permission to the tmp folder:",
-//       err
-//     );
-//   }
-// }
-
-// checkPermissions();
-
 (async function () {
   // Configuration
   cloudinary.config({
-    cloud_name: "dmt2cp7t7",
-    api_key: "382543213736579",
-    api_secret: "Fx9YngYz5sKHChoF17mIXaNZbvg",
+    cloud_name: process.env.cloud_name,
+    api_key: process.env.api_key,
+    api_secret: process.env.api_secret,
   });
-
-  //   // Upload an image
-  //   const uploadResult = await cloudinary.uploader
-  //     .upload(
-  //       "https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg",
-  //       {
-  //         public_id: "shoes",
-  //         folder: "notes-images",
-  //       }
-  //     )
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-
-  //   console.log(uploadResult);
-
-  //   // Optimize delivery by resizing and applying auto-format and auto-quality
-  //   const optimizeUrl = cloudinary.url("shoes", {
-  //     fetch_format: "auto",
-  //     quality: "auto",
-  //   });
-
-  //   console.log("optimized url ", optimizeUrl);
-
-  //   // Transform the image: auto-crop to square aspect_ratio
-  //   const autoCropUrl = cloudinary.url("shoes", {
-  //     crop: "auto",
-  //     gravity: "auto",
-  //     width: 500,
-  //     height: 500,
-  //   });
-
-  //   console.log(autoCropUrl);
 })();
 
 app.get("/backend", (req, res) => {
@@ -128,6 +81,8 @@ app.post("/deleteNote", deleteNote);
 app.post("/uploadImage", uploadImage);
 
 app.post("/getSingleNote", getNoteById);
+
+app.post("/signup", handleSignup);
 
 app.listen(3000, (req, res) => {
   console.log("Server is running...");

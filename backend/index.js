@@ -13,7 +13,7 @@ import {
 } from "./Controller/NoteController.js";
 import fileUpload from "express-fileupload";
 import { fileURLToPath } from "url";
-import { handleSignup } from "./Controller/AuthController.js";
+import { handleLogin, handleSignup } from "./Controller/AuthController.js";
 // import fspromises from "fs/promises";
 // import fs from "fs";
 
@@ -83,6 +83,8 @@ app.post("/uploadImage", uploadImage);
 app.post("/getSingleNote", getNoteById);
 
 app.post("/signup", handleSignup);
+
+app.post("/login", handleLogin);
 
 app.listen(3000, (req, res) => {
   console.log("Server is running...");

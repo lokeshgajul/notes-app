@@ -27,7 +27,7 @@ export const ThemeProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log("Current Theme:", theme); // Logs whenever the theme changes
+    console.log("Current Theme:", theme);
   }, [theme]);
 
   const value = {

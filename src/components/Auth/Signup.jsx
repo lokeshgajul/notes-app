@@ -1,37 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import signup from "../../assets/singup.jpg";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-const Signup = () => {
-  const [user, SetUser] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
-  const navigate = useNavigate();
+import { Link, useNavigate } from "react-router-dom";
+import { Authcontext } from "@/context/AuthContext";
 
-  const handleSignup = async () => {
-    try {
-      const res = await axios.post("http://localhost:3000/signup", {
-        name: user.name,
-        email: user.email,
-        password: user.password,
-      });
-      const data = res.data;
-      SetUser(data);
-      navigate("/signin");
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+const Signup = () => {
+  const { user, handleSignup, setUser } = useContext(Authcontext);
+  const navigate = useNavigate();
 
   return (
     <main className="bg-indigo-200 h-screen p-8">
       <section className="flex flow-row justify-end items-center">
         <p className="text-sm text-zinc-600 mr-2">Already have an account</p>
         <button className="text-[13px]  px-4 py-1.5 border-[1px] hover:bg-indigo-5l00 hover:text-white border-black rounded-3xl">
-          Sign In
+          <Link to="/signin">Sign In</Link>
         </button>
       </section>
       <div className="grid grid-cols-2 gap-4 p-3 ">
@@ -61,7 +43,7 @@ const Signup = () => {
                 id="name"
                 value={user.name}
                 onChange={(e) =>
-                  SetUser((prevUser) => ({ ...prevUser, name: e.target.value }))
+                  setUser((prevUser) => ({ ...prevUser, name: e.target.value }))
                 }
                 className="border border-gray-500 hover:border-indigo-600 hover:border-1 bg-indigo-200 rounded-md px-3  focus:outline-none"
               />
@@ -79,7 +61,7 @@ const Signup = () => {
                 id="email"
                 value={user.email}
                 onChange={(e) =>
-                  SetUser((prevUser) => ({
+                  setUser((prevUser) => ({
                     ...prevUser,
                     email: e.target.value,
                   }))
@@ -100,7 +82,7 @@ const Signup = () => {
                 id="password"
                 value={user.password}
                 onChange={(e) =>
-                  SetUser((prevUser) => ({
+                  setUser((prevUser) => ({
                     ...prevUser,
                     password: e.target.value,
                   }))
@@ -113,7 +95,10 @@ const Signup = () => {
             </div>
             <div>
               <button
-                onClick={() => handleSignup()}
+                onClick={() => {
+                  handleSignup();
+                  navigate("/signin");
+                }}
                 className="p-2 bg-indigo-700 text-white rounded-full px-11 hover:bg-indigo-600 hover:font-semibold"
               >
                 Login

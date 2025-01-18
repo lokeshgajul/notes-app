@@ -167,7 +167,7 @@ const Notes = ({ notes, edit }) => {
             >
               <p className="break-words text-[14px] capitalize">{item.title}</p>
               <p className="pt-1 pb-2 break-words text-[13px]">
-                {item.description}
+                {item.description.slice(0, 40)}...
               </p>
             </div>
             <div className="flex flex-row justify-end items-end ">

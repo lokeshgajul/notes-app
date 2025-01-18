@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import homepage from "../assets/homepage.png";
+import { Authcontext } from "@/context/AuthContext";
 
 const Home = () => {
   const navigate = useNavigate();
+
+  const { isLoggedIn } = useContext(Authcontext);
+
   return (
     <div className="bg-[#1f2123]">
       <ul className="flex flex-row justify-end items-end space-x-6 text-white p-6">

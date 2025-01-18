@@ -1,37 +1,26 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import signup from "../../assets/singup.jpg";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Authcontext } from "@/context/AuthContext";
 
 const Login = () => {
-  const [user, SetUser] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  const { user, handleLogin, setUser, isLoggedIn, setIsLoggedIn } =
+    useContext(Authcontext);
   const navigate = useNavigate();
 
-  const handleSignup = async () => {
-    try {
-      const res = await axios.post("http://localhost:3000/signup", {
-        name: user.name,
-        email: user.email,
-        password: user.password,
-      });
-      const data = res.data;
-      SetUser(data);
-      navigate("/signin");
-      console.log(data);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleLoginClick = async () => {
+    await handleLogin();
+    // await setIsLoggedIn(true);
+    navigate("/");
   };
+
   return (
     <main className="bg-indigo-200 h-screen p-8">
       <section className="flex flow-row justify-end items-center">
-        <p className="text-sm text-zinc-600 mr-2">Already have an account</p>
+        <p className="text-sm text-zinc-600 mr-2">Create account</p>
         <button className="text-[13px]  px-4 py-1.5 border-[1px] hover:bg-indigo-5l00 hover:text-white border-black rounded-3xl">
-          Sign In
+          <Link to="/signup">Sign Up</Link>
         </button>
       </section>
       <div className="grid grid-cols-2 gap-4 p-3 ">
@@ -61,7 +50,7 @@ const Login = () => {
                 id="email"
                 value={user.email}
                 onChange={(e) =>
-                  SetUser((prevUser) => ({
+                  setUser((prevUser) => ({
                     ...prevUser,
                     email: e.target.value,
                   }))
@@ -82,7 +71,7 @@ const Login = () => {
                 id="password"
                 value={user.password}
                 onChange={(e) =>
-                  SetUser((prevUser) => ({
+                  setUser((prevUser) => ({
                     ...prevUser,
                     password: e.target.value,
                   }))
@@ -95,7 +84,7 @@ const Login = () => {
             </div>
             <div>
               <button
-                onClick={() => handleSignup()}
+                onClick={() => handleLoginClick()}
                 className="p-2 bg-indigo-700 text-white rounded-full px-11 hover:bg-indigo-600 hover:font-semibold"
               >
                 Login

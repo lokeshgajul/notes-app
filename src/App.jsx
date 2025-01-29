@@ -1,5 +1,6 @@
 import Main from "./components/Auth/Main";
 import { AuthProvider } from "./context/AuthContext";
+import { NotesProvider } from "./context/NotesContext";
 import { ThemeProvider } from "./context/ThemeContext";
 
 function App() {
@@ -7,7 +8,9 @@ function App() {
     <div>
       <AuthProvider>
         <ThemeProvider>
-          <Main />
+          <NotesProvider>
+            <Main />
+          </NotesProvider>
         </ThemeProvider>
       </AuthProvider>
     </div>

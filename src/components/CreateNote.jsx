@@ -10,21 +10,23 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useRef, useState } from "react";
-import Notes from "./Notes";
+import { useContext, useEffect, useRef, useState } from "react";
+import NotesCard from "./NotesCard";
 import axios from "axios";
 import { MdOutlineDone } from "react-icons/md";
+import { ThemeContext } from "@/context/ThemeContext";
 
 const CreateNote = () => {
   const [open, setOpen] = useState();
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
-  const [notes, setNotes] = useState([]);
+  const [NotesCardCard, setNotesCardCard] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [image, setImage] = useState(null);
   const containRef = useRef(null);
   const isFormValid = () => title.trim() && desc.trim();
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     const handleClickoutside = (event) => {
@@ -43,42 +45,10 @@ const CreateNote = () => {
     const file = e.target.files[0];
     if (file) {
       const newImage = URL.createObjectURL(file);
-      setImage(newImage); // optional
-      // setNotes((prevNotes) =>
-      //   prevNotes.map((note, i) =>
-      //     i === index ? { ...note, image: newImage } : note
-      //   )
-      // );
+      setImage(newImage);
     }
     console.log("file", image);
   };
-
-  // Edit Note
-  // const hanleEditNote = (index) => {
-  //   const note = notes[index];
-  //   setTitle(note.title);
-  //   setDesc(note.desc);
-  //   setIsEditing(true);
-  //   setEditIndex(index);
-  //   setOpen(true);
-  // };
-
-  // ADD or UPDATE notes state
-  // const handleSaveNote = () => {
-  //   if (isEditing) {
-  //     const updateNotes = [...notes];
-  //     updateNotes[editIndex] = { title, desc };
-  //     setNotes(updateNotes);
-  //     setEditIndex(null);
-  //     setIsEditing(false);
-  //   } else {
-  //     setNotes([...notes, { title, desc }]);
-  //   }
-
-  //   setOpen(false);
-  //   setTitle("");
-  //   setDesc("");
-  // };
 
   const handleCreateNote = async () => {
     if (!title || !desc) {
@@ -86,10 +56,6 @@ const CreateNote = () => {
     }
 
     if (isEditing) {
-      // const updateNotes = [...notes];
-      // updateNotes[editIndex] = { title, desc };
-      // setNotes(updateNotes);
-
       setEditIndex(null);
       setIsEditing(false);
     } else {
@@ -101,8 +67,8 @@ const CreateNote = () => {
 
         const savedNote = await response.data;
         console.log("data", savedNote);
-        setNotes([
-          ...notes,
+        setNotesCardCard([
+          ...NotesCard,
           { title: savedNote.title, desc: savedNote.description },
         ]);
       } catch (error) {
@@ -115,12 +81,17 @@ const CreateNote = () => {
   };
 
   return (
-    <div>
-      <div className="flex justify-center items-start ">
-        <div className=" rounded-xl p-1 mt-5 shadow-slate-400 shadow-md border-t-2 relative w-2/3">
-          <div className="w-full ">
+    <div className="">
+      <section className="ml-14 w-[600px]">
+        <div
+          className={`flex flex-col rounded-xl p-1 shadow-md w-full ${
+            theme == "dark" ? "bg-[#3a3939] " : "bg-white shadow-slate-400 "
+          }`}
+          style={{ width: "100%" }} // Ensure it respects the section width
+        >
+          <div className="w-full relative">
             <button
-              className="absolute top-2 right-2 p-2"
+              className={`absolute top-2 right-2 p-2`}
               onClick={() => setOpen(!open)}
             >
               <MdOutlineDone
@@ -128,12 +99,22 @@ const CreateNote = () => {
                   if (isFormValid()) handleCreateNote();
                 }}
                 size={20}
-                color={isFormValid() ? "black" : "grey"}
+                color={
+                  theme == "dark"
+                    ? isFormValid()
+                      ? "white"
+                      : "grey"
+                    : isFormValid()
+                    ? "black"
+                    : "grey"
+                }
               />
             </button>
 
             <div
-              className="flex justify-start items-start"
+              className={`flex justify-start items-start ${
+                theme == "dark" ? "bg-[#3a3939]" : "bg-white"
+              }`}
               onClick={() => setOpen(!open)}
             >
               <input
@@ -145,23 +126,23 @@ const CreateNote = () => {
                 }}
                 id="note"
                 placeholder="Title"
-                className="p-2.5 focus:outline-none rounded-lg capitalize text-[14px] font-semibold tracking-wide   w-full placeholder-gray-500 text-gray-800"
+                className={`p-2.5 focus:outline-none rounded-lg capitalize text-[14px] font-semibold tracking-wide w-full ${
+                  theme == "dark"
+                    ? "bg-[#3a3939] text-white placeholder-gray-400"
+                    : "bg-white text-black placeholder-gray-500"
+                }`}
               />
             </div>
 
             {open && (
               <>
                 <div className="flex justify-start items-start">
-                  {/* <input
-                type="text"
-                name="desc"
-                id="note"
-                value={desc}
-                onChange={(e) => setDesc(e.target.value)}
-                placeholder="Take a note"
-              /> */}
                   <textarea
-                    className="p-2.5 focus:outline-none rounded-lg capitalize text-[13px] font-medium tracking-wider w-full placeholder-gray-500 text-black"
+                    className={`p-2.5 focus:outline-none rounded-lg capitalize text-[13px] font-medium tracking-wider w-full text-black ${
+                      theme == "dark"
+                        ? "bg-[#3a3939] text-white placeholder-gray-400"
+                        : "bg-white text-black placeholder-gray-500"
+                    }`}
                     name="desc"
                     placeholder="Take a note"
                     id="note"
@@ -178,7 +159,9 @@ const CreateNote = () => {
                 </div>
                 <div className="flex justify-center items-center">
                   <p
-                    className="w-full text-end pr-6 pb-2 cursor-pointer"
+                    className={`w-full text-end pr-6 pb-2 cursor-pointer ${
+                      theme == "dark" ? "text-white" : "text-black"
+                    }`}
                     onClick={() => setOpen(false)}
                   >
                     close
@@ -188,17 +171,7 @@ const CreateNote = () => {
             )}
           </div>
         </div>
-      </div>
-
-      <div className="pl-20 mt-10">
-        <Notes
-          notes={notes}
-          // handleDeleteNotes={handleDeleteNotes}
-          // edit={hanleEditNote}
-          handleImage={handleImageUpload}
-          image={image}
-        />
-      </div>
+      </section>
     </div>
   );
 };

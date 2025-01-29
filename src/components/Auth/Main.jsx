@@ -10,10 +10,13 @@ import Signup from "./Signup";
 import Login from "./Login";
 import Navbar from "../Navbar";
 import Sidebar from "../Sidebar";
+import Notes from "../Notes";
+import { ThemeContext } from "@/context/ThemeContext";
 
 function Main() {
   const [loginStatus, setLoginStatus] = useState(false);
   const { isLoggedIn } = useContext(Authcontext);
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     const getStatus = localStorage.getItem("status");
@@ -24,17 +27,25 @@ function Main() {
   return (
     <Router>
       {loginStatus ? (
-        <>
+        <div
+          className={`h-screen ${
+            theme == "dark" ? "bg-[#1f2123]" : "bg-white"
+          } `}
+        >
           <Navbar />
-          <div className="flex flex-row">
-            <Sidebar />
-            <Routes>
-              <Route path="/" Component={CreateNote} />
-              <Route path="/notifications" Component={Notifications} />
-              <Route path="/noteDetails/:noteId" Component={NoteDetails} />
-            </Routes>
+          <div className="flex flow-row ">
+            <div className="w-[220px]">
+              <Sidebar />
+            </div>
+            <div className="flex flex-grow justify-start ml-20">
+              <Routes>
+                <Route path="/" Component={Notes} />
+                <Route path="/notifications" Component={Notifications} />
+                <Route path="/noteDetails/:noteId" Component={NoteDetails} />
+              </Routes>
+            </div>
           </div>
-        </>
+        </div>
       ) : (
         <Routes>
           <Route path="/" Component={Home} />

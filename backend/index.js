@@ -6,6 +6,7 @@ import { v2 as cloudinary } from "cloudinary";
 import mongoDbConnection from "./DB/Db.js";
 import {
   deleteNote,
+  editNoteByID,
   GenerateNote,
   getNoteById,
   getNotes,
@@ -85,6 +86,8 @@ app.post("/getSingleNote", getNoteById);
 app.post("/signup", handleSignup);
 
 app.post("/login", handleLogin);
+
+app.post("/editNote", editNoteByID);
 
 app.listen(3000, (req, res) => {
   console.log("Server is running...");

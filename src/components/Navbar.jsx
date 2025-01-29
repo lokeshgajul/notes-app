@@ -8,8 +8,8 @@ const Navbar = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
   return (
     <div
-      className={`  flex flex-row justify-between items-center p-1 pr-5 border border-b-1 ${
-        theme == "dark" ? "bg-[#09090b]" : "bg-white"
+      className={`  flex flex-row justify-between items-center p-1 pr-5 shadow-md ${
+        theme == "dark" && "bg-[#2c2c2c]"
       } `}
     >
       <div
@@ -19,16 +19,7 @@ const Navbar = () => {
       >
         MY NOTES
       </div>
-      <div className="p-1 rounded-xl flex flex-row bg-[#fef6f8] items-center">
-        <div className="flex items-center px-2">
-          <CiSearch size={16} color="grey" />
-        </div>
-        <input
-          type="search"
-          placeholder="Search"
-          className="bg-[#fef6f8] rounded-2xl pl-2 flex-grow outline-none"
-        />
-      </div>
+
       <div
         className={`cursor-pointer  ${
           theme == "dark" ? "text-white" : "text-black"

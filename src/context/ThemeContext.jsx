@@ -3,7 +3,7 @@ import { createContext, useEffect, useState } from "react";
 export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState("dark");
 
   // const toggleTheme = () => {
   //   if (theme == "light") {
@@ -21,13 +21,12 @@ export const ThemeProvider = ({ children }) => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
 
-    // Dynamically update body background
     document.body.style.backgroundColor =
-      newTheme === "dark" ? "#1f1f1f" : "blue";
+      newTheme === "dark" ? "#1f2123" : "white";
   };
 
   useEffect(() => {
-    console.log("Current Theme:", theme); // Logs whenever the theme changes
+    console.log("Current Theme:", theme);
   }, [theme]);
 
   const value = {

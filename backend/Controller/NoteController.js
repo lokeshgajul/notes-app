@@ -110,3 +110,30 @@ export const getNoteById = async (req, res) => {
     console.error(error);
   }
 };
+
+export const editNoteByID = async (req, res) => {
+  try {
+    const { id, title, description } = req.body;
+
+    if (!id || !title || !description) {
+      return res.status(400).json({ message: "Invalid request data" });
+    }
+
+    const updatedNote = await Note.findByIdAndUpdate(
+      id,
+      { title, description },
+      { new: true, runValidators: true }
+    );
+    if (!updatedNote) {
+      return res.status(404).json({ message: "Note not found" });
+    }
+
+    console.log("updated data", updatedNote);
+
+    res
+      .status(200)
+      .json({ message: "Note updated successfully", note: updatedNote });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
